@@ -1,13 +1,11 @@
 
 module.exports = {
     name : 'help',
-    execute(msg, args){
-        help(msg, args);
+    execute(msg, args, Discord){
+        help(msg, args, Discord);
     }
 };
-const Discord = require('discord.js');
-
-function help(msg, args) {
+function help(msg, args, Discord) {
     const emb = new Discord.MessageEmbed()
         .setColor('#6053E7');
     emb.description = 'Please tell me what happened?';
@@ -15,17 +13,14 @@ function help(msg, args) {
     msg.author.send(emb);
 
     switch (args[0]) {
-        case 'rule':
-        case 'rules':
-            msg.author.send('Rules');
-            break;
         default:
-            msg.users.get('Dumbledore')
-                .send('Help needed, contact user: ' + msg.author.username
-                    + '\n' + msg);
+            const id  = msg.guild.ownerID;
+            const user = msg.users.cache.get(`${id}`); 
+            user.send('Help needed, contact user: ' + msg.author.username
+            + '\n' + msg).catch(console.error());
             return msg.author
-                .send('The Headmaster will contact you shortly!');
+            .send('The Headmaster will contact you shortly!');
             break;
     }
-   
+             
 };
